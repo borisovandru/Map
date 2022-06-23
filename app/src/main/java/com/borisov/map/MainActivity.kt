@@ -7,7 +7,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.yandex.mapkit.MapKitFactory
 import com.borisov.map.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
