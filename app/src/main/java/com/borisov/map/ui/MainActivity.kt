@@ -1,4 +1,4 @@
-package com.borisov.map
+package com.borisov.map.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.borisov.map.R
 import com.borisov.map.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
