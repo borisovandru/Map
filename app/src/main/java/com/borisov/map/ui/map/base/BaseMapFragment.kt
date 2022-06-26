@@ -1,4 +1,4 @@
-package com.borisov.map.ui.map
+package com.borisov.map.ui.map.base
 
 /**
  * @author Borisov Andrey on 23.06.2022
@@ -22,14 +22,17 @@ import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.runtime.image.ImageProvider
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.borisov.map.BuildConfig
 import com.borisov.map.R
 import com.borisov.map.databinding.FragmentMapBinding
+import com.borisov.map.ui.map.MapViewModel
 
 abstract class BaseMapFragment : Fragment(R.layout.fragment_map) {
-    private val viewBinding: FragmentMapBinding by viewBinding()
+    val viewBinding: FragmentMapBinding by viewBinding()
+    protected var mapObjects: MapObjectCollection? = null
     private var locationManager: LocationManager? = null
-    private var mapObjects: MapObjectCollection? = null
+    protected val viewModel: MapViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         MapKitFactory.setApiKey(BuildConfig.YANDEX_KEY)

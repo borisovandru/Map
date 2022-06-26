@@ -1,6 +1,7 @@
 package com.borisov.map.data.storage.entity
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.borisov.map.domain.models.MarkerDomain
 
 /**
@@ -8,9 +9,9 @@ import com.borisov.map.domain.models.MarkerDomain
  **/
 @Entity(
     tableName = "tab_map_markers",
-    primaryKeys = ["markerId"]
 )
 data class Marker(
+    @PrimaryKey(autoGenerate = true)
     val markerId: Int,
     val latitude: Double,
     val longitude: Double,

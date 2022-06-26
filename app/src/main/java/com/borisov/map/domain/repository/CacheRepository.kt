@@ -1,5 +1,6 @@
 package com.borisov.map.domain.repository
 
+import com.borisov.map.domain.AppState
 import com.borisov.map.domain.models.MarkerDomain
 
 /**
@@ -7,11 +8,11 @@ import com.borisov.map.domain.models.MarkerDomain
  **/
 interface CacheRepository {
 
-    suspend fun addMarker(marker: MarkerDomain)
+    suspend fun addMarker(marker: MarkerDomain): AppState
 
-    suspend fun getMarkers(): List<MarkerDomain>
+    suspend fun getMarkers(): AppState
 
-    suspend fun removeMarker(markerId: Int)
+    suspend fun removeMarker(markerId: Int): AppState
 
-    suspend fun updateMarker(marker: MarkerDomain)
+    suspend fun updateMarker(marker: MarkerDomain): AppState
 }

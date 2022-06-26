@@ -10,14 +10,14 @@ import com.borisov.map.data.storage.entity.Marker
 interface StorageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMarker(marker: Marker)
+    fun addMarker(marker: Marker): Long
 
     @Query("SELECT * FROM tab_map_markers ORDER by title")
     fun getMarkers(): List<Marker>
 
     @Query("DELETE FROM tab_map_markers WHERE markerId = :markerId")
-    fun removeMarker(markerId: Int)
+    fun removeMarker(markerId: Int): Int
 
     @Update
-    fun updateMarker(marker: Marker)
+    fun updateMarker(marker: Marker): Int
 }
