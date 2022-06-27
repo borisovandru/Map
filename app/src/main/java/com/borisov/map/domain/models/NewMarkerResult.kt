@@ -7,5 +7,5 @@ import com.yandex.mapkit.geometry.Point
  **/
 data class NewMarkerResult(
     val result: Boolean,
-    val position: Point
+    val position: Point,
 ) : DataResult

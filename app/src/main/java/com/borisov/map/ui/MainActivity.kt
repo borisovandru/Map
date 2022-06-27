@@ -11,10 +11,10 @@ import com.borisov.map.R
 import com.borisov.map.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity(R.layout.activity_main), Updater {
 
     private val viewBinding: ActivityMainBinding by viewBinding()
-
+    private val publisher = Publisher()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,4 +30,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
+    override fun getUpdater(): Publisher = publisher
 }

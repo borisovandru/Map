@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -27,6 +28,7 @@ import com.borisov.map.BuildConfig
 import com.borisov.map.R
 import com.borisov.map.databinding.FragmentMapBinding
 import com.borisov.map.ui.map.MapViewModel
+import com.borisov.map.ui.markers.MarkersFragment
 
 abstract class BaseMapFragment : Fragment(R.layout.fragment_map) {
     val viewBinding: FragmentMapBinding by viewBinding()
@@ -63,8 +65,15 @@ abstract class BaseMapFragment : Fragment(R.layout.fragment_map) {
                 locationManager
                     ?.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
-                        0,
-                        0f,
+                        ZERO_LONG,
+                        ZERO_FLOAT,
+                        locationListener
+                    )
+                locationManager
+                    ?.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        ZERO_LONG,
+                        ZERO_FLOAT,
                         locationListener
                     )
                 useMap(true)
@@ -101,6 +110,12 @@ abstract class BaseMapFragment : Fragment(R.layout.fragment_map) {
             null
         )
 
+        /* Если в bundle есть координаты, значит мы выбрали переход к выбранной точке
+        * Получаем координаты, перемещаем карту к точке и удаляем из bundle координаты, чтобы
+        * можно было вернуться к стартовой точке на карте
+        */
+        getLocationToMove()
+
         mapObjects?.addPlacemark(
             Point(location.latitude, location.longitude),
             ImageProvider.fromResource(
@@ -108,8 +123,42 @@ abstract class BaseMapFragment : Fragment(R.layout.fragment_map) {
                 R.drawable.image_location_my
             )
         )
-
         stopUpdates()
+    }
+
+    private fun getLocationToMove() {
+        val lon = NavHostFragment.findNavController(this).currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<Double>(MarkersFragment.KEY_MARKER_LON)
+        val lat = NavHostFragment.findNavController(this).currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<Double>(MarkersFragment.KEY_MARKER_LAT)
+
+        lon?.value?.let { lonn ->
+            lat?.value?.let { latt ->
+                viewBinding.mapView.map.move(
+                    CameraPosition(
+                        Point(latt, lonn),
+                        DEF_ZOOM,
+                        ZERO_FLOAT,
+                        ZERO_FLOAT
+                    ),
+                    Animation(Animation.Type.SMOOTH, ZERO_FLOAT),
+                    null
+                )
+                clearLocationInBundle()
+            }
+        }
+    }
+
+    private fun clearLocationInBundle() {
+        val navController = NavHostFragment.findNavController(this)
+        navController.currentBackStackEntry?.savedStateHandle?.set(
+            MarkersFragment.KEY_MARKER_LON,
+            null
+        )
+        navController.currentBackStackEntry?.savedStateHandle?.set(
+            MarkersFragment.KEY_MARKER_LAT,
+            null
+        )
     }
 
     /* Отпишемся после первого получения. Можно было через locationManager.requestSingleUpdate,
@@ -134,5 +183,7 @@ abstract class BaseMapFragment : Fragment(R.layout.fragment_map) {
     companion object {
         const val DEF_ZOOM = 16.0f
         const val ZERO_FLOAT = 0f
+        const val ZERO_LONG = 0L
+
     }
 }

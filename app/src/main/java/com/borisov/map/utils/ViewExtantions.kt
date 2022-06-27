@@ -14,6 +14,8 @@ fun View.showSnakeBar(text: String, length: Int = Snackbar.LENGTH_SHORT) {
 
 fun View.click(click: () -> Unit) = setOnClickListener { click() }
 
+fun View.longClick(longClick: () -> Boolean) = setOnLongClickListener { longClick() }
+
 fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
     this.arguments = bundleOf(*arguments)
     return this

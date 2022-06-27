@@ -15,6 +15,9 @@ class CacheRepositoryImpl(private val dataSource: CacheDataSource) : CacheReposi
     override suspend fun getMarkers(): AppState =
         dataSource.getMarkers()
 
+    override suspend fun getMarkerById(markerId: Int): AppState =
+        dataSource.getMarkerById(markerId = markerId)
+
     override suspend fun removeMarker(markerId: Int): AppState =
         dataSource.removeMarker(markerId = markerId)
 

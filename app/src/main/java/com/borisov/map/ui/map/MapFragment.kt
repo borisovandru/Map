@@ -2,9 +2,9 @@ package com.borisov.map.ui.map
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.InputListener
 import com.yandex.mapkit.map.Map
@@ -13,35 +13,35 @@ import com.borisov.map.R
 import com.borisov.map.domain.AppState
 import com.borisov.map.domain.models.MarkersResult
 import com.borisov.map.domain.models.NewMarkerResult
+import com.borisov.map.ui.Screen
 import com.borisov.map.ui.map.base.BaseMapFragment
+import com.borisov.map.utils.showSnakeBar
 
 /**
  * @author Borisov Andrey on 23.06.2022
  **/
 
-class MapFragment : BaseMapFragment(), InputListener {
+class MapFragment : BaseMapFragment(), InputListener, Screen {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding.mapView.map.addInputListener(this)
-
+        viewModel.getMarkers()
         viewModel.getOperationLiveData()
             .observe(viewLifecycleOwner) { res -> renderData(result = res) }
-
-        viewModel.getMarkers()
     }
 
     private fun renderData(result: AppState) {
         when (result) {
             is AppState.Error -> {
-                Log.d("VVVV", "${result.error.localizedMessage}")
+                loading(true)
             }
             AppState.Loading -> {
-                Log.d("VVVV", "Loading")
+                loading(true)
             }
             is AppState.Success -> {
-                Log.d("VVVV", "Success")
+                loading(true)
                 renderSuccess(result)
             }
         }
@@ -53,6 +53,7 @@ class MapFragment : BaseMapFragment(), InputListener {
                 mapAddNewMarker(marker)
             }
             is MarkersResult -> {
+                mapObjects?.clear()
                 mapAddAllMarkers(marker)
             }
         }
@@ -82,15 +83,23 @@ class MapFragment : BaseMapFragment(), InputListener {
         )
     }
 
-    override fun onMapTap(p0: Map, p1: Point) {
-        viewModel.saveMarker(p1)
+    override fun onMapTap(map: Map, point: Point) {
+        viewModel.saveMarker(point)
     }
 
-    override fun onMapLongTap(p0: Map, p1: Point) {
+    override fun onMapLongTap(map: Map, point: Point) {
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewBinding.mapView.map.removeInputListener(this)
+    }
+
+    override fun loading(isLoading: Boolean) {
+        viewBinding.progress.isVisible = isLoading
+    }
+
+    override fun showError(throwable: Throwable) {
+        viewBinding.root.showSnakeBar(throwable.localizedMessage)
     }
 }

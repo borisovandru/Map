@@ -3,10 +3,7 @@ package com.borisov.map.data.repository.datasource
 import com.borisov.map.data.mappers.markerToDataLayer
 import com.borisov.map.data.storage.Storage
 import com.borisov.map.domain.AppState
-import com.borisov.map.domain.models.MarkerDomain
-import com.borisov.map.domain.models.MarkersResult
-import com.borisov.map.domain.models.NewMarkerResult
-import com.borisov.map.domain.models.OperationResult
+import com.borisov.map.domain.models.*
 import com.yandex.mapkit.geometry.Point
 
 /**
@@ -20,7 +17,7 @@ class CacheDataSourceImpl(private val storage: Storage) : CacheDataSource {
                 .addMarker(markerToDataLayer(marker))
             AppState.Success(
                 NewMarkerResult(
-                    result > 0, Point(
+                    result > ZERO_INT, Point(
                         marker.latitude, marker.longitude
                     )
                 )
@@ -40,12 +37,23 @@ class CacheDataSourceImpl(private val storage: Storage) : CacheDataSource {
             AppState.Error(err)
         }
 
+    override suspend fun getMarkerById(markerId: Int): AppState =
+        try {
+            val result = storage
+                .storageDao()
+                .getMarkerById(markerId = markerId)
+                .toDomain()
+            AppState.Success(MarkerResult(result = result))
+        } catch (err: Exception) {
+            AppState.Error(err)
+        }
+
     override suspend fun removeMarker(markerId: Int) =
         try {
             val result = storage
                 .storageDao()
                 .removeMarker(markerId)
-            AppState.Success(OperationResult(result > 0))
+            AppState.Success(OperationResult(result > ZERO_INT))
         } catch (err: Exception) {
             AppState.Error(err)
         }
@@ -59,4 +67,8 @@ class CacheDataSourceImpl(private val storage: Storage) : CacheDataSource {
         } catch (err: Exception) {
             AppState.Error(err)
         }
+
+    companion object {
+        private const val ZERO_INT = 0
+    }
 }

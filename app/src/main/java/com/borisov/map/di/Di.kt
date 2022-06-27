@@ -6,10 +6,8 @@ import com.borisov.map.data.repository.datasource.CacheDataSource
 import com.borisov.map.data.repository.datasource.CacheDataSourceImpl
 import com.borisov.map.data.storage.Storage
 import com.borisov.map.domain.repository.CacheRepository
-import com.borisov.map.domain.usecases.AddMarkerUseCase
-import com.borisov.map.domain.usecases.GetMarkersUseCase
-import com.borisov.map.domain.usecases.RemoveMarkerUseCase
-import com.borisov.map.domain.usecases.UpdateMarkerUseCase
+import com.borisov.map.domain.usecases.*
+import com.borisov.map.ui.edit.EditViewModel
 import com.borisov.map.ui.map.MapViewModel
 import com.borisov.map.ui.markers.MarkersViewModel
 import org.koin.android.ext.koin.androidContext
@@ -35,7 +33,17 @@ object Di {
         }
 
         viewModel() {
-            MarkersViewModel()
+            MarkersViewModel(
+                getMarkersUseCase = get(),
+                removeMarkerUseCase = get()
+            )
+        }
+
+        viewModel() {
+            EditViewModel(
+                updateMarkerUseCase = get(),
+                getMarkerByIdUseCase = get()
+            )
         }
     }
 
@@ -46,6 +54,10 @@ object Di {
 
         factory<GetMarkersUseCase> {
             GetMarkersUseCase(repository = get())
+        }
+
+        factory<GetMarkerByIdUseCase> {
+            GetMarkerByIdUseCase(repository = get())
         }
 
         factory<RemoveMarkerUseCase> {
