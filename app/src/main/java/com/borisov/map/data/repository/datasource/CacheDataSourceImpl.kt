@@ -63,7 +63,7 @@ class CacheDataSourceImpl(private val storage: Storage) : CacheDataSource {
             val result = storage
                 .storageDao()
                 .updateMarker(markerToDataLayer(marker))
-            AppState.Success(OperationResult(result > 0))
+            AppState.Success(OperationResult(result > ZERO_INT))
         } catch (err: Exception) {
             AppState.Error(err)
         }

@@ -45,14 +45,12 @@ class MarkersFragment : BaseMarkersFragment(), Screen, MarkerAdapter.Delegate, U
     }
 
     override fun showError(throwable: Throwable) {
-        viewBinding.root.showSnakeBar(throwable.localizedMessage)
+        throwable.localizedMessage?.let { viewBinding.root.showSnakeBar(it) }
     }
 
     override fun onItemClick(marker: MarkerDomain) {}
 
-    override fun onItemLongClick(marker: MarkerDomain) {
-        showActionsDialog(marker)
-    }
+    override fun onItemLongClick(marker: MarkerDomain) = showActionsDialog(marker)
 
     private fun showActionsDialog(marker: MarkerDomain) {
         AlertDialog.Builder(requireContext())
@@ -93,11 +91,8 @@ class MarkersFragment : BaseMarkersFragment(), Screen, MarkerAdapter.Delegate, U
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecyclerSetting()
-
         viewModel.getMarkers()
-
         viewModel.getOperationLiveData()
             .observe(viewLifecycleOwner) { res -> renderData(result = res) }
     }

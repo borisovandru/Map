@@ -47,10 +47,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
-    implementation "androidx.navigation:navigation-ui-ktx:2.4.2"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.0"
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
     implementation 'com.yandex.android:mapkit:3.5.0'
     kapt 'androidx.room:room-compiler:2.4.2'

@@ -15,23 +15,20 @@ class EditViewModel(
     private val getMarkerByIdUseCase: GetMarkerByIdUseCase,
 ) : BaseEditViewModel() {
 
-    override fun handleError(throwable: Throwable) {
+    override fun handleError(throwable: Throwable) =
         getOperationLiveData().postValue(AppState.Error(throwable))
-    }
 
     override fun updateMarker(marker: MarkerDomain) =
         viewModelScopeCoroutine.launch {
             getOperationLiveData().postValue(AppState.Loading)
-            getOperationLiveData()
-                .postValue(
-                    updateMarkerUseCase.execute(marker)
-                )
+            getOperationLiveData().postValue(
+                updateMarkerUseCase.execute(marker)
+            )
         }
 
     override fun getMarker(markerId: Int) =
         viewModelScopeCoroutine.launch {
             getOperationLiveData().postValue(AppState.Loading)
-            getOperationLiveData()
-                .postValue(getMarkerByIdUseCase.execute(markerId))
+            getOperationLiveData().postValue(getMarkerByIdUseCase.execute(markerId))
         }
 }

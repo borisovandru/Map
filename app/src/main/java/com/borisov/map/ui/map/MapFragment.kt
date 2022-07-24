@@ -100,6 +100,6 @@ class MapFragment : BaseMapFragment(), InputListener, Screen {
     }
 
     override fun showError(throwable: Throwable) {
-        viewBinding.root.showSnakeBar(throwable.localizedMessage)
+        throwable.localizedMessage?.let { viewBinding.root.showSnakeBar(it) }
     }
 }

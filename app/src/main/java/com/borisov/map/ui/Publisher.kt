@@ -6,13 +6,9 @@ package com.borisov.map.ui
 class Publisher {
     private val observers: MutableList<UpdateObserver>
 
-    fun subscribe(observer: UpdateObserver) {
-        observers.add(observer)
-    }
+    fun subscribe(observer: UpdateObserver) = observers.add(observer)
 
-    fun unsubscribe(observer: UpdateObserver) {
-        observers.remove(observer)
-    }
+    fun unsubscribe(observer: UpdateObserver) = observers.remove(observer)
 
     fun startUpdate() {
         for (observer in observers) {
